@@ -52,19 +52,17 @@ You can run the full stack with only Docker plus an ESP32-S3.
 
 Option A  Flash from your host
 
-1) Install ESP-IDF (one-time). You do not need to source it in every terminal.
+Install ESP-IDF on your host. Then run firmware commands through this repo's wrapper, which sources ESP-IDF only for the duration of the command (no permanent shell changes).
 
-2) Connect the board and confirm the port, for example /dev/ttyACM0
-
-3) Build and flash using the repo wrapper (recommended). The wrapper sources ESP-IDF only for that single command, so it does not permanently change your environment.
+Build and flash
 
 ```bash
-# Option 1: Makefile (simplest)
-IDF_PATH=~/esp/esp-idf make fw-flash ESP_PORT=/dev/ttyACM0 ESP_BAUD=460800
+# From repo root
+IDF_PATH=$HOME/esp-idf make fw-flash ESP_PORT=/dev/ttyACM0 ESP_BAUD=460800
 
-# Option 2: direct wrapper (no Makefile)
-IDF_PATH=~/esp/esp-idf ./scripts/idf -C esp32/model_client set-target esp32s3
-IDF_PATH=~/esp/esp-idf ./scripts/idf -C esp32/model_client -p /dev/ttyACM0 -b 460800 build flash
+# Or without Makefile
+IDF_PATH=$HOME/esp-idf ./scripts/idf -C esp32/model_client set-target esp32s3
+IDF_PATH=$HOME/esp-idf ./scripts/idf -C esp32/model_client -p /dev/ttyACM0 -b 460800 build flash
 ```
 
 Option B  Flash from the container
