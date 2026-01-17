@@ -190,3 +190,17 @@ Most failures are port permissions, board reset windows, or (T,F) mismatches.
 ## Citation
 
 If you use EdgeFlow in academic work, cite the GitHub repository and describe the contract in docs/model_format.md.
+
+
+## ESP32 build notes
+
+If you see `Failed to create SPIFFS image for partition "model"`, your project is not using the repo partition table. This repo ships `esp32/model_client/sdkconfig.defaults` which selects `esp32/model_client/partitions.csv`, but an older `sdkconfig` created on your machine can override it. Reset and rebuild:
+
+```bash
+IDF_PATH=$HOME/esp-idf make fw-reconfigure
+IDF_PATH=$HOME/esp-idf make fw-flash ESP_PORT=/dev/ttyACM0 ESP_BAUD=460800
+```
+
+The SPIFFS contents that get packed into the `model` partition come from `esp32/model_client/spiffs_image/`. Put your model files there before you run a model flash.
+
+If your ESP32-S3 module has 16MB flash and you want a larger model partition, copy `esp32/model_client/partitions_16mb.csv` over `esp32/model_client/partitions.csv`, then run `make fw-reconfigure` again.

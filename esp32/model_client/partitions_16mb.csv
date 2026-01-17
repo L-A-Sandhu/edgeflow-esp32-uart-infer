@@ -2,6 +2,5 @@
 nvs,      data, nvs,     0x9000,   24K,
 phy_init, data, phy,     0xF000,   4K,
 factory,  app,  factory, 0x10000,  2M,
-# SPIFFS partition used to store the model and related artifacts.
-# Sized to fit both 8MB and 16MB ESP32-S3 modules.
-model,    data, spiffs,  0x210000, 5120K,
+# Larger SPIFFS partition for 16MB modules.
+model,    data, spiffs,  0x210000, 14272K,
