@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# EdgeFlow helper: run ESP-IDF's idf.py with an ephemeral environment.
+# This script affects ONLY this process and its children (it does not modify your shell).
+#
+# Examples
+#   ./scripts/idf -C esp32/model_client set-target esp32s3
+#   ./scripts/idf -C esp32/model_client -p /dev/ttyACM0 -b 460800 build flash
+
+# Repo root
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Respect IDF_PATH if already set. Otherwise try common install locations.
+if [[ -z "${IDF_PATH:-}" ]]; then
+  for p in \
+    "$HOME/esp/esp-idf" \
+    "$HOME/esp-idf" \
+    "/opt/esp/esp-idf" \
+    "/opt/esp-idf" \
+    "$ROOT/../esp-idf" \
+    ; do
+    if [[ -f "$p/export.sh" ]]; then
+      export IDF_PATH="$p"
+      break
+    fi
+  done
+fi
+
+if [[ -z "${IDF_PATH:-}" || ! -f "$IDF_PATH/export.sh" ]]; then
+  echo "ERROR: ESP-IDF not found (idf.py missing)." >&2
+  echo "Fix: install ESP-IDF, then either:" >&2
+  echo "  1) export IDF_PATH=/path/to/esp-idf   (for this shell), or" >&2
+  echo "  2) run: IDF_PATH=/path/to/esp-idf ./scripts/idf <args>" >&2
+  exit 1
+fi
+
+# Activate ESP-IDF env for *this* command only
+# shellcheck disable=SC1090
+source "$IDF_PATH/export.sh" >/dev/null
+
+exec idf.py "$@"
