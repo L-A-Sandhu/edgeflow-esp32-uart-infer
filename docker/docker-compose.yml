@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  edgeflow-v2:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:8080"
+    privileged: true
+    user: "0:0"
+    devices:
+      - "/dev/ttyACM0:/dev/ttyACM0"
+    environment:
+      SERIAL_PORT: "/dev/ttyACM0"
+      UART_BAUD: "115200"
+      IDF_BAUD: "921600"
+      PORT: "8080"
+      FLASH_FIRMWARE: "0"
+      FLASH_SPIFFS_DEFAULT: "1"

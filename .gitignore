@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+Results/
+
+# ESP-IDF build artifacts
+esp32/model_client/build/
+esp32/model_client/sdkconfig*
+
+# SPIFFS image staging
+esp32/model_client/spiffs_image/
+
+# Local runs
+*.npy
+*.bin
+infer_out.json
+pred.npy
+
+# OS
+.DS_Store
